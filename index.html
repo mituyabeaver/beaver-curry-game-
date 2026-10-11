@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#21150f">
+<meta name="description" content="ビバ蔵カレーゲームの横向き画面テスト版">
+<title>ビバ踊るマハラジャ 〜至高のカレーを求めて〜</title>
+<style>
+:root{--ink:#fff1c8;--gold:#f5bd45;--red:#b93625;--brown:#4b2818;--dark:#21150f;--panel:#39251b;--line:#e5a83c}
+*{box-sizing:border-box}html,body{width:100%;height:100%;overflow:hidden;overscroll-behavior:none}body{margin:0;background:#160f0b;color:var(--ink);font-family:ui-monospace,monospace;image-rendering:pixelated;background-image:radial-gradient(ellipse at 50% 0%,#a94a1e 0,#482014 40%,#160c09 78%);background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;background:repeating-linear-gradient(90deg,transparent 0 46px,#e7a83a 47px 49px,transparent 50px 96px),repeating-linear-gradient(0deg,transparent 0 44px,#7a2719 45px 47px,transparent 48px 96px);mask-image:linear-gradient(to bottom,#000,transparent 75%)}
+button{font:inherit;touch-action:manipulation;cursor:pointer;color:inherit}
+.game{position:relative;isolation:isolate;width:100%;height:100vh;height:100dvh;max-width:1100px;margin:auto;min-height:0;overflow:hidden;padding:7px;background:linear-gradient(180deg,#3e2115eF,#20110df7 70%);border-inline:4px solid #714326;box-shadow:0 0 0 3px #d18a32,0 0 35px #d66a1c55}
+.game:before{content:"";position:absolute;z-index:-1;inset:0;opacity:.55;background:radial-gradient(ellipse at 50% 28%,#e7a13a44,transparent 45%),repeating-linear-gradient(90deg,transparent 0 78px,#b86b2c18 79px 84px,transparent 85px 156px)}
+header{text-align:center;border:3px solid var(--line);background:linear-gradient(90deg,#42170f,#74321a,#42170f);padding:6px 8px;box-shadow:inset 0 0 0 3px #25130c,0 3px 0 #160c08}
+h1{font-size:clamp(17px,4.4vw,28px);line-height:1.35;margin:0;color:#ffd45d;text-shadow:2px 2px #7c2018,3px 3px #160d08}
+.subtitle{font-size:11px;color:#f5d9a0;margin-top:5px}
+.audio-bar{display:flex;gap:6px;justify-content:center;margin-top:8px;flex-wrap:wrap}.audio-btn{background:#2d1b13;border:2px solid #e5a83c;padding:6px 10px;font-size:11px;color:#ffe5a0}.audio-btn[aria-pressed="false"]{opacity:.65;border-color:#8b7660}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:5px 0}
+.stat{background:#2d1b13;border:2px solid #9c652c;padding:3px;text-align:center}.stat small{display:block;font-size:10px;color:#e9bd73}.stat strong{font-size:19px;color:#fff0b0}
+.scene{position:relative;display:grid;grid-template-columns:94px 1fr;gap:7px;background:linear-gradient(90deg,#135a6688,#1d8b8b55,#67251b66),url("palace-scene.png") center 48%/cover no-repeat;border:3px solid #f1b74d;padding:5px;min-height:116px;max-height:130px;overflow:hidden;box-shadow:inset 0 0 0 2px #6d311a,0 4px 0 #160d08}
+.scene:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#102b3280,transparent 45%,#32120c66);opacity:.8;pointer-events:none}
+.mascot{z-index:1;border:3px solid #f4c44c;background:linear-gradient(#165f67,#292018);display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:92px;box-shadow:0 0 0 2px #542315}
+.mascot img{width:100%;height:100%;object-fit:cover;image-rendering:pixelated}
+.speech{z-index:1;align-self:center;background:#fff0c6;color:#4b2818;border:2px solid #e9b44b;padding:5px 7px;font-size:11px;line-height:1.35;box-shadow:3px 3px #28140c}
+.section-title{font-size:12px;color:#ffd56c;margin:6px 0 3px;text-shadow:1px 1px #000}
+.order{background:linear-gradient(110deg,#f9e9b9,#e9c77b);color:#4b2516;border:3px double #9a5923;padding:5px 7px;display:flex;justify-content:space-between;align-items:center;gap:8px;box-shadow:0 3px 0 #180d08}
+.order strong{font-size:13px}.order .hint{font-size:10px}
+.tray{height:92px;min-height:92px;background:linear-gradient(135deg,#63351e,#29180f);border:3px solid #dca043;padding:5px;margin-top:4px;display:flex;flex-direction:column;box-shadow:inset 0 0 0 2px #120b07,0 3px 0 #120b07}.tray-items{flex:1;min-height:0;overflow-y:auto;align-content:flex-start;overscroll-behavior:contain}
+.tray-top{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#f5c967;margin-bottom:3px}
+.tray-items{display:flex;flex-wrap:wrap;gap:6px;min-height:0;align-items:flex-start}
+.tray-item{font-size:20px;background:#493022;border:2px solid #8d5a30;padding:2px 5px;min-width:39px;text-align:center;position:relative;touch-action:manipulation}.tray-item.selected{border-color:#ffe36a;background:#8a5722;box-shadow:0 0 0 2px #ffe36a,0 0 10px #ffcf42;transform:translateY(-2px)}.tray-item.selected:after{content:"✓";position:absolute;top:-6px;right:-4px;background:#ffe36a;color:#392116;font-size:10px;font-weight:bold;border-radius:50%;width:15px;height:15px;line-height:15px}
+.tray-item small{display:block;font-size:9px;line-height:1.1}
+.empty{color:#a98c70;font-size:12px}
+.products{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,auto);gap:4px;max-height:none;overflow:visible;padding:1px}
+.product{background:linear-gradient(145deg,#214f68,#102638);border:2px solid #e0a747;box-shadow:inset 0 0 0 1px #2a170f,0 2px 0 #100906;padding:2px 1px;min-height:49px;min-width:0;text-align:center;border-radius:4px}
+.product:active,.action:active{transform:translateY(2px);filter:brightness(1.25)}
+.product .emoji{display:block;font-size:20px;line-height:1}.product .name{font-size:9px;display:block;margin-top:2px;overflow-wrap:anywhere;line-height:1.15}.product .count{display:inline-block;margin-top:1px;background:#21130d;color:#ffe08a;padding:2px 4px;font-size:10px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:5px;position:sticky;bottom:0;z-index:5;padding:7px 0 calc(7px + env(safe-area-inset-bottom));background:#160f0b}
+.action{min-height:43px;border:3px solid #f6cd64;box-shadow:inset 0 0 0 2px #612e16,0 3px 0 #100906;font-weight:bold;font-size:15px;border-radius:4px}
+.waste{background:linear-gradient(#cf4b32,#8f211b);color:#fff0cf;border-color:#ffc36b}.bell{background:linear-gradient(#ffdf53,#e58a17);color:#4b1b0c;font-size:18px;border-color:#fff0a1}
+.message{min-height:25px;text-align:center;padding:5px 4px;color:#ffe28a;font-size:12px}
+.footer{font-size:10px;color:#b99b7c;text-align:center;padding:8px}
+.overlay{position:fixed;inset:0;background:#100a08dd;display:flex;align-items:center;justify-content:center;padding:20px;z-index:10}
+.modal{max-width:420px;width:100%;text-align:center;background:#392116;border:4px solid #e5ae42;padding:22px;box-shadow:0 0 0 4px #24140d}
+.modal h2{color:#ffd15a;font-size:24px}.modal p{font-size:13px;line-height:1.8}
+.start{background:#c33b22;border:3px solid #ffdb70;padding:13px 22px;font-weight:bold;font-size:17px;width:100%}
+@media(min-width:560px){.game{padding:10px}.scene{grid-template-columns:112px 1fr;max-height:130px}.products{grid-template-columns:repeat(8,minmax(0,1fr));gap:5px}.product{min-height:66px;padding:4px}.product .emoji{font-size:25px}.product .name{font-size:10px}.tray{height:100px;min-height:100px}.actions{grid-template-columns:1fr 1fr}}
+@media (orientation:landscape) and (max-height:560px){.game{height:100vh;height:100dvh;padding:4px;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);grid-template-rows:auto auto auto auto auto 1fr auto;column-gap:6px;align-content:start}.game>header{grid-column:1/-1;padding:3px}.subtitle{display:none}h1{font-size:18px}.stats{grid-column:1/-1;margin:3px 0}.scene{grid-column:1;grid-row:3 / span 2;min-height:0;height:100%;max-height:none;grid-template-columns:72px 1fr}.mascot{min-height:0}.section-title{margin:3px 0 2px}.game>.section-title:nth-of-type(1){grid-column:2}.order{grid-column:2}.game>.section-title:nth-of-type(2){grid-column:1}.tray{grid-column:1;height:74px;min-height:74px}.game>.section-title:nth-of-type(3){grid-column:2;grid-row:5}.products{grid-column:2;grid-row:6;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px}.product{min-height:35px;padding:1px}.product .emoji{font-size:18px}.product .name{font-size:8px}.product .count{font-size:8px;padding:0 2px}.actions{grid-column:1;grid-row:6;align-self:end;grid-template-columns:1fr;gap:3px;margin:0;padding:3px 0}.action{min-height:34px;font-size:12px}.bell{font-size:15px}.message{grid-column:1/-1;min-height:18px;padding:2px}.footer{display:none}.overlay{padding:8px}.modal{padding:10px}.modal h2{font-size:19px}.modal p{font-size:11px;margin:7px 0}.start{padding:8px}}
+@media (orientation:landscape) and (max-height:430px){.game{padding:2px;grid-template-rows:auto auto minmax(58px,1fr) auto auto minmax(70px,1.1fr) auto}.game>header{padding:1px}h1{font-size:15px}.stats{margin:1px 0}.stat{padding:1px}.stat strong{font-size:14px}.scene{padding:2px;gap:3px}.speech{font-size:9px;padding:3px}.section-title{font-size:10px;margin:1px 0}.order{padding:2px 4px}.order strong{font-size:11px}.order .hint{font-size:8px}.tray{height:58px;min-height:58px;padding:2px}.tray-item{font-size:15px;padding:1px 3px}.products{align-content:stretch}.product{min-height:29px}.product .emoji{font-size:15px}.product .name{font-size:7px}.actions{padding:1px 0}.action{min-height:28px;font-size:10px}.bell{font-size:12px}.message{font-size:9px;min-height:14px}}
+
+</style>
+</head>
+<body>
+<div class="game">
+<header><h1>ビバ踊るマハラジャ</h1><div class="subtitle">〜 至高のカレーを求めて 〜</div></header>
+<div class="stats">
+ <div class="stat"><small>スコア</small><strong id="score">000000</strong></div>
+ <div class="stat"><small>コンボ</small><strong id="combo">0</strong></div>
+ <div class="stat"><small>のこり時間</small><strong id="time">90</strong></div>
+</div>
+<div class="scene">
+ <div class="mascot"><img src="vivazo-pixel.png" alt="マハラジャ衣装のビバ蔵"></div>
+ <div class="speech" id="speech">「最高のカレーを作るんだゾ！」<br>注文を揃えたら、ベルを鳴らすのだ！</div>
+</div>
+<div class="section-title">▶ お客様の注文</div>
+<div class="order"><div><strong id="orderName">カレーライス × 3</strong><div class="hint" id="orderHint">注文どおりにトレイへ揃えよう</div></div><div style="font-size:28px">📜</div></div>
+<div class="section-title">▶ お届けトレイ</div>
+<div class="tray"><div class="tray-top"><span>TRAY / のせた商品</span><span id="trayCount">0 個</span></div><div class="tray-items" id="trayItems"><span class="empty">商品ボタンをタップしてね</span></div></div>
+<div class="section-title">▶ 商品をタップ！</div>
+<div class="products" id="products"></div>
+<div class="actions">
+ <button class="action waste" id="waste">🗑 選んだ料理を廃棄（−20）</button>
+ <button class="action bell" id="bell">🔔 完成ベル！</button>
+</div>
+<div class="message" id="message" aria-live="polite">まずは注文どおりに商品をタップしよう！</div>
+<div class="footer">PONKOTHU GAMES • VIVA CURRY PALACE • TEST BUILD</div>
+</div>
+<div class="overlay" id="overlay">
+ <div class="modal"><h2>🦫 ビバ蔵カレー屋へようこそ！</h2><div class="audio-bar"><button class="audio-btn" id="bgmToggle" aria-pressed="true">🎵 BGM ON</button><button class="audio-btn" id="sfxToggle" aria-pressed="true">🔊 効果音 ON</button></div><p>8種類の商品から注文どおりに選んでトレイに載せよう。<br>間違えた商品は廃棄できるけど、フードロスで減点！<br>レトロ8bitのBGMと効果音つき！<br>注文が揃ったら完成ベルを押すのだ！<br><br><b>90秒で何点取れるかな？</b></p><button class="start" id="start">カレー作り開始！</button></div>
+</div>
+<script>
+const menu={
+ rice:{name:'カレーライス',emoji:'🍛'}, udon:{name:'カレーうどん',emoji:'🍜'},
+ special:{name:'特製カレー',emoji:'🥘'}, katsu:{name:'カツカレー',emoji:'🍛'},
+ cheese:{name:'チーズカレー',emoji:'🧀'}, naan:{name:'ナンカレー',emoji:'🫓'},
+ samosa:{name:'サモサ',emoji:'🥟'}, lassi:{name:'ラッシー',emoji:'🥛'}
+};
+const $=id=>document.getElementById(id);
+const productArea=$('products');
+productArea.innerHTML=Object.entries(menu).map(([key,item])=>`<button class="product" data-product="${key}"><span class="emoji">${item.emoji}</span><span class="name">${item.name}</span><span class="count">0 個</span></button>`).join('');
+let score=0,combo=0,time=90,active=false,timer=null,order={},tray=[],served=0,selectedTrayIndex=null;
+// Web Audio chip tune: no external audio file required. Starts after the player's tap.
+let audioCtx=null,bgmOn=true,sfxOn=true,bgmTimer=null,step=0;
+const melody=[659,784,988,784,659,523,587,659,784,988,1175,988,784,659,587,523,659,784,880,784,659,587,523,587,659,784,988,784,659,523,587,659];
+const bass=[131,131,196,196,110,110,165,165,131,131,196,196,98,98,147,147];
+function ensureAudio(){if(!audioCtx){audioCtx=new (window.AudioContext||window.webkitAudioContext)();}if(audioCtx.state==='suspended')audioCtx.resume();}
+function tone(freq,duration,wave='square',volume=.035,delay=0){if(!audioCtx)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=wave;o.frequency.value=freq;g.gain.setValueAtTime(volume,audioCtx.currentTime+delay);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+delay+duration);o.connect(g);g.connect(audioCtx.destination);o.start(audioCtx.currentTime+delay);o.stop(audioCtx.currentTime+delay+duration+.02);}
+function tickBgm(){if(!bgmOn||!audioCtx)return;const i=step%melody.length;tone(melody[i],.105,'square',.025);if(step%2===0)tone(bass[Math.floor(step/2)%bass.length],.18,'triangle',.035);if(step%8===0)tone(1600,.025,'square',.009);step++;}
+function startBgm(){ensureAudio();if(bgmTimer)clearInterval(bgmTimer);if(bgmOn)bgmTimer=setInterval(tickBgm,145);}
+function playSfx(type){if(!sfxOn)return;ensureAudio();if(type==='tap'){tone(520,.045,'square',.035);tone(780,.045,'square',.02,.035);}else if(type==='serve'){[784,988,1175,1568].forEach((f,i)=>tone(f,.12,'square',.04,i*.07));}else if(type==='error'){tone(220,.16,'sawtooth',.035);tone(165,.22,'sawtooth',.025,.12);}else if(type==='waste'){tone(330,.08,'triangle',.03);tone(220,.15,'triangle',.025,.08);}}
+$('bgmToggle').addEventListener('click',()=>{bgmOn=!bgmOn;$('bgmToggle').textContent=bgmOn?'🎵 BGM ON':'🎵 BGM OFF';$('bgmToggle').setAttribute('aria-pressed',String(bgmOn));if(bgmOn&&active)startBgm();else if(bgmTimer){clearInterval(bgmTimer);bgmTimer=null;}});
+$('sfxToggle').addEventListener('click',()=>{sfxOn=!sfxOn;$('sfxToggle').textContent=sfxOn?'🔊 効果音 ON':'🔇 効果音 OFF';$('sfxToggle').setAttribute('aria-pressed',String(sfxOn));if(sfxOn)playSfx('tap');});
+function randomOrder(){
+ const keys=Object.keys(menu); const count=Math.min(1+Math.floor(served/3),4,keys.length);
+ const shuffled=[...keys].sort(()=>Math.random()-.5).slice(0,count); order={};
+ shuffled.forEach((key,i)=>order[key]=served<3?Math.floor(Math.random()*2)+1:Math.floor(Math.random()*3)+1);
+ renderOrder();
+}
+function renderOrder(){
+ const bits=Object.entries(order).map(([k,n])=>`${menu[k].emoji} ${menu[k].name} × ${n}`);
+ $('orderName').textContent=bits.join('　＋　'); $('orderHint').textContent='注文数ぴったりでベルを押そう';
+}
+function renderTray(){
+ $('trayCount').textContent=tray.length+' 個';
+ $('trayItems').innerHTML=tray.length?tray.map((k,i)=>`<button class="tray-item${selectedTrayIndex===i?' selected':''}" data-remove="${i}" aria-pressed="${selectedTrayIndex===i}" aria-label="${menu[k].name}を${selectedTrayIndex===i?'選択中':'選択'}">${menu[k].emoji}<small>${menu[k].name}</small></button>`).join(''):'<span class="empty">商品ボタンをタップしてね</span>';
+ document.querySelectorAll('.tray-item').forEach(b=>b.addEventListener('click',()=>{if(!active)return;const idx=+b.dataset.remove;selectedTrayIndex=selectedTrayIndex===idx?null:idx;playSfx('tap');$('message').textContent=selectedTrayIndex===null?'廃棄する料理の選択を解除したよ':'廃棄したい料理を選択中。赤い廃棄ボタンで取り除けるよ';renderTray();}));
+ $('waste').textContent=selectedTrayIndex===null?'🗑 料理を選んで廃棄（−20）':'🗑 選んだ料理を廃棄（−20）';
+ $('waste').disabled=selectedTrayIndex===null || !active;
+ document.querySelectorAll('.product').forEach(b=>{const k=b.dataset.product;b.querySelector('.count').textContent=tray.filter(x=>x===k).length+' 個';});
+}
+function update(){$('score').textContent=String(score).padStart(6,'0');$('combo').textContent=combo;$('time').textContent=time;renderTray();}
+function addProduct(k){if(!active)return;playSfx('tap');selectedTrayIndex=null;tray.push(k);$('message').textContent=`${menu[k].name}をトレイに載せた！`; $('speech').textContent=tray.length>Object.values(order).reduce((a,b)=>a+b,0)?'「おっと、取りすぎたかもだゾ！」':'「よしよし、順調だゾ！」';renderTray();}
+document.querySelectorAll('.product').forEach(b=>b.addEventListener('click',()=>addProduct(b.dataset.product)));
+$('waste').addEventListener('click',()=>{if(!active)return;if(selectedTrayIndex===null||selectedTrayIndex<0||selectedTrayIndex>=tray.length){$('message').textContent='先にトレーの廃棄したい料理をタップしてね！';return;}playSfx('waste');const removed=tray.splice(selectedTrayIndex,1)[0];selectedTrayIndex=null;score=Math.max(0,score-20);combo=0;$('message').textContent=`${menu[removed].name}を廃棄！ FOOD LOSS −20`;$('speech').textContent='「食材は大切にするんだゾ……！」';update();});
+$('bell').addEventListener('click',()=>{
+ if(!active)return;
+ const got={};tray.forEach(k=>got[k]=(got[k]||0)+1);
+ const exact=Object.keys(menu).every(k=>(got[k]||0)===(order[k]||0));
+ if(exact){playSfx('serve');const amount=100+combo*25;score+=amount;combo++;served++;$('message').textContent=`🔔 チーン！ 提供成功！ +${amount} 点`; $('speech').textContent=combo>=5?'「究極の味に近づいてきたゾーー！！」':'「どうぞ！ 召し上がれだゾ！」';tray=[];update();setTimeout(()=>{if(active){randomOrder();$('message').textContent='次のお客様の注文だ！';}},650);}
+ else {playSfx('error');combo=0;$('message').textContent='❌ 注文数が違うよ！ 数を確認しよう';$('speech').textContent='「まだ注文と合ってないゾ！ 落ち着いて！」';update();}
+});
+function endGame(){active=false;clearInterval(timer);if(bgmTimer){clearInterval(bgmTimer);bgmTimer=null;}$('overlay').style.display='flex';$('overlay').innerHTML=`<div class="modal"><h2>🍛 営業終了！</h2><p>提供数：<b>${served}</b> 件<br>最終スコア：<b>${score}</b><br><br>${score>=1000?'「マハラジャ級の腕前だゾ！」':'「次はもっと美味しく作るんだゾ！」'}</p><button class="start" id="restart">もう一度プレイ！</button></div>`;$('restart').addEventListener('click',startGame);}
+function startGame(){ensureAudio();if(bgmOn)startBgm();score=0;combo=0;time=90;served=0;tray=[];selectedTrayIndex=null;active=true;$('overlay').style.display='none';$('speech').textContent='「最高のカレーを作るんだゾ！」';randomOrder();update();clearInterval(timer);timer=setInterval(()=>{time--;update();if(time<=0)endGame();},1000);$('message').textContent='営業開始！ 注文をさばこう！';}
+$('start').addEventListener('click',startGame);
+renderOrder();update();
+</script>
+</body>
+</html>
